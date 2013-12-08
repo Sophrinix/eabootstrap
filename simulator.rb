@@ -34,10 +34,10 @@ public
 
   # Constructor.
   def initialize(balance, leverage, base_currency)
-    account = Account.new(balance, balance, 0, leverage, base_currency)
-    @instruments = Array.new
+    @account = Account.new(balance, balance, 0, leverage, base_currency)
+    @instruments = []
     @ticket = 0
-  end
+   end
   
   #---------------------------------------------------------------------------
   # Interaction with the server.
@@ -61,11 +61,15 @@ public
   # Instruments handling.
   #---------------------------------------------------------------------------
   def use_instrument(instrument)
-    @instruments.push(instrument)
+    instruments.push(instrument)
   end
 
-  def reach_end?
-    @ticket > instruments.first.timestamps.length
+  def advance_cursors
+    instruments.first.advance_cursor
+  end
+
+  def reached_end?
+    instruments.length == 0 || instruments.first.reached_end?
   end
 
   #---------------------------------------------------------------------------
