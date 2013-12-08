@@ -26,11 +26,17 @@ class Account
   
   # Sets Account's attributes only.
   def initialize(initial_balance, initial_equity, initial_margin, lev, currcy)
-    balance       = initial_balance
-    equity        = initial_equity
-    margin        = initial_margin
-    leverage      = lev
-    base_currency = currcy
+    # Account position / status.
+    @balance       = initial_balance
+    @equity        = initial_equity
+    @margin        = initial_margin
+    @leverage      = lev
+    @base_currency = currcy
+
+    # Open and closed trades.
+    @orders = []
+    @positions = []
+    @closed_positions = []
   end
   
   # Calculates free margin.

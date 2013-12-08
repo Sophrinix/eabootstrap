@@ -22,28 +22,27 @@ load 'simulator.rb'
 load 'instrument.rb'
 
 class ExpertAdvisor < Simulator
-  attr_reader :eurusd
+  attr_reader :eurusd, :x
 
   # Constructor: initialize super-class, prepare instruments, calculate static
   # indicators, and calls begin-tick-end structure.
-  def initialize
-    # Super-class initialization.
-    initial_balance  = 15000
-    account_leverage = 100
-    account_currency = "USD"
+  def initialize(initial_balance, account_leverage, account_currency)
     super(initial_balance, account_leverage, account_currency) 
+    @x = true
 
     # R environment.
     R.quit
     @renv = RinRuby.new(echo = false, interactive = false)
     
+    # TODO: cronometer these computing times.
     get_instruments                      # Fetch and register instruments.
     vectorized                           # Calculate static indicators.
 
     before_ticks                         # BEGIN-tick-end.
     until reached_end?                   # begin-TICK-end.
       tick
-      advance_cursors
+      execute_scheduled_orders
+      advance_next_cursor
     end
     after_ticks                          # begin-tick-END.
   end
@@ -65,8 +64,12 @@ class ExpertAdvisor < Simulator
     require(p, quietly = TRUE, character.only = TRUE)
   }
 
-  usePackage('RPostgreSQL')
-  usePackage('MASS')
+  usePackage('RPostgreSQL')  # database
+  #usePackage('MASS')         # truehist
+  #usePackage('zoo')          # dependency
+  #usePackage('TTR')          # technical trading rules
+  #usePackage('fTrading')     # technical trading analysis
+  #usePackage('forecast')
   
   driver <- dbDriver('PostgreSQL')
   con <- dbConnect(driver, dbname='marketplayer')
@@ -79,11 +82,16 @@ class ExpertAdvisor < Simulator
   #png('grafico.png')
   #truehist(r)
   #dev.off()
+
+  #sma <- SMA(close, n=10)
+  #print(sma)
   
   dbDisconnect(con)
   dbUnloadDriver(driver)
 EOF
     logreturns = @renv.pull('r')
+    #sma = @renv.sma[1..10]
+    #puts "#{sma}"
   end
   
   # After `vectorized' gets static indicators ready-to-use, the begin-tick-end
@@ -97,6 +105,11 @@ EOF
   # stepping depending on the calculation method.
   def tick
     print "."
+
+    if x then
+      send_order(@eurusd, "long", 0.01)
+      @x = false
+    end
   end
   
   # This is the last part of the begin-tick-end structure, it is immediately
@@ -107,4 +120,8 @@ EOF
   end
 end
 
-ExpertAdvisor.new
+# Run expert advisor.
+initial_balance  = 15000
+account_leverage = 100
+account_currency = "USD"
+ExpertAdvisor.new(initial_balance, account_leverage, account_currency)

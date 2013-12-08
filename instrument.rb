@@ -45,14 +45,16 @@ class Instrument
   
   attr_accessor :stop_level   # Margin call when equity * stop_level < margin.
   attr_accessor :freeze_level # Freeze SL/TP within freeze_level * pip_size
+
+  attr_accessor :default_lot  # Default lot size.
   
   attr_accessor :mode         # Time series mode, "OHLC" or "TICK".
   attr_accessor :period       # Time series period, :M1, :M5, ..., :MN1.
 
   # Timestamped Univariate Time Series (uts): OHLC (candlestick) or tick data.
   attr_accessor :datetime_uts
-  attr_accessor :open_uts, :high_uts, :low_uts, :close_uts # if mode == "OHLC"
-  attr_accessor :tick_uts                                  # if mode == "TICK"
+  attr_accessor :open_uts, :high_uts, :low_uts, :close_uts, :volume_uts # OHLC
+  attr_accessor :tick_uts                                               # TICK
 
   attr_accessor :i            # Cursor for serial accessing.
   
@@ -70,11 +72,12 @@ class Instrument
     meta          = connection.exec(meta_query)
     @short_name   = meta.first["short_name"]
     @full_name    = meta.first["full_name"]
-    @leverage     = meta.first["leverage"]
-    @pip_size     = meta.first["pip_size"]
-    @digits       = meta.first["digits"]
-    @stop_level   = meta.first["stop_level"]
-    @freeze_level = meta.first["freeze_level"]
+    @leverage     = meta.first["leverage"].to_i
+    @pip_size     = meta.first["pip_size"].to_f
+    @digits       = meta.first["digits"].to_i
+    @stop_level   = meta.first["stop_level"].to_f
+    @freeze_level = meta.first["freeze_level"].to_f
+    @default_lot  = meta.first["default_lot"].to_i
 
     # Quotes information.
     @mode   = "OHLC"
@@ -88,6 +91,15 @@ class Instrument
     @high_uts     = quotes.column_values(2)
     @low_uts      = quotes.column_values(3)
     @close_uts    = quotes.column_values(4)
+    @volume_uts   = quotes.column_values(5)
+
+    # Convert data to proper format.
+    #@datetime_uts.map!  { |s| Time.parse(s) }       # FIXME: str -> datetime
+    @open_uts.map!      { |s| s.to_f }
+    @high_uts.map!      { |s| s.to_f }
+    @low_uts.map!       { |s| s.to_f }
+    @close_uts.map!     { |s| s.to_f }
+    @volume_uts.map!    { |s| s.to_i }
     
     connection.close                                     # pgres close.
 
@@ -134,6 +146,19 @@ class Instrument
 
   def close(lag)
     lag >= 0 ? @close_uts[@i - lag] : nil
+  end
+
+  def volume(lag)
+    lag >= 0 ? @volume_uts[@i - lag] : nil
+  end
+
+  # Bid / Ask prices.
+  def ask
+    @close_uts[@i] + 2 * @pip_size
+  end
+
+  def bid
+    @close_uts[@i]
   end
 end
 

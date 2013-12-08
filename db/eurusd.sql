@@ -6,16 +6,18 @@ CREATE TABLE eurusd_meta (
   pip_size      FLOAT        NOT NULL,
   digits        INTEGER      NOT NULL,
   stop_level    FLOAT        NOT NULL,
-  freeze_level  FLOAT        NOT NULL
+  freeze_level  FLOAT        NOT NULL,
+  default_lot   INTEGER      NOT NULL
 );
 
 /* Financial instrument's series. */
 CREATE TABLE eurusd_d1 (
-  date  TIMESTAMP NOT NULL UNIQUE PRIMARY KEY,
-  open  FLOAT     NOT NULL,
-  high  FLOAT     NOT NULL,
-  low   FLOAT     NOT NULL,
-  close FLOAT     NOT NULL
+  date   TIMESTAMP NOT NULL UNIQUE PRIMARY KEY,
+  open   FLOAT     NOT NULL,
+  high   FLOAT     NOT NULL,
+  low    FLOAT     NOT NULL,
+  close  FLOAT     NOT NULL,
+  volume INTEGER   NOT NULL
 );
 
 /* Import data. */
