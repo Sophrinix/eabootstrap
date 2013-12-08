@@ -76,7 +76,7 @@ class ExpertAdvisor < Simulator
   close <- df$close
   r <- diff(log(close))
 
-  #png('/tmp/grafico.png')
+  #png('grafico.png')
   #truehist(r)
   #dev.off()
   
