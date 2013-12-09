@@ -1,7 +1,7 @@
 WHAT IS?
 ========
 
-EA bootstrap is an open source platform for quickly and professionally R&amp;D new expert advisors for Forex.
+*EA bootstrap* is an open source platform for quickly and professionally R&amp;D new expert advisors for Forex.
 
 Written as a Ruby API, EA bootstrap provides an environment for quickly building hybrid Expert Advisors and static/dynamic indicators with multiple time-series.
 All-in-one, expert advisors can perform calculations on entire time-series (just like R, S-plus, and Matlab traders do) as well as tick-by-tick (just like MetaTrader traders do) in the same program.
@@ -23,14 +23,22 @@ The second phase, begin-tick-end, features a loop ranging all the ticks in the t
 LINK WITH OTHER TECHNOLOGIES
 ============================
 
-Currently, EA bootstrap has total integration with the statistical software R at any development phase.
+Currently, *EA bootstrap* has total integration with the statistical software R at any development phase.
 All R libraries and functions are be available from EA bootstrap.
 
-Moreover, EA bootstrap may link seamlessly in the future with
+Moreover, *EA bootstrap* may link seamlessly in the future with
 - S-plus
 - Matlab
 - Octave
 - Mathematica
+
+
+EVENT PROFILER
+==============
+
+*EA bootstrap* comes with an _event profiler_.
+An event profiler helps understanding, at a first glance, which opportunities an expert advisor is finding and how it is performing.
+Correcting biased strategies and getting new insights so comes to be easy to spot.
 
 
 ANALYSIS
@@ -43,11 +51,12 @@ It has basic statistics, performance, sharpe index, MFE points distribution, and
 PARAMETER OPTIMIZATION
 ======================
 
-EA bootstrap comes with an optimizer in order to search for the best parameters for the created expert advisor.
+*EA bootstrap* comes with an optimizer in order to search for the best parameters for the created expert advisor.
 It is possible to optimize measurable functions, like
-- expected return
-- profit / loss ratio
-- maximum drawdown
+- Expected Return;
+- Profit / Loss ratio;
+- Maximum Relative Drawdown;
+- Maximum Absolute Drawdown;
 and others.
 
 
