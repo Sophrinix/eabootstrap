@@ -3,7 +3,8 @@ What is?
 
 *EA bootstrap* is an open source platform for quickly and professionally R&amp;D new expert advisors for Forex.
 
-Written as a Ruby API, EA bootstrap provides an environment for quickly building hybrid Expert Advisors and static/dynamic indicators with multiple time-series.
+Written as a Ruby API, *EA bootstrap* provides an environment for quickly building hybrid Expert Advisors and static/dynamic indicators with multiple time-series.
+
 All-in-one, expert advisors can perform calculations on entire time-series (just like R, S-plus, and Matlab traders do) as well as tick-by-tick (just like MetaTrader traders do) in the same program.
 
 
@@ -13,7 +14,9 @@ Strategies covered
 The main line is to give foundation to build, evaluate and test any kind of strategy, from Modern Portfolio Theory's Buy and Hold up to High-Frequency Trading.
 
 This is possible because EA bootstrap has an hybrid approach for simulation in two phases:
+
 1) Vectorized
+
 2) Begin-Tick-End.
 
 Vectorized phase enables one to calculate the whole time-series, just like R, S-plus, and Matlab traders do.
@@ -57,7 +60,7 @@ Post analysis
 =============
 
 Post-analysis are performed in a spreadsheet generated after EA bootstrap's execution.
-It has basic statistics, performance, sharpe index, MFE points distribution, and other.
+It has basic statistics, performance, sharpe index, MFE points distribution, and others.
 
 
 Parameter optimization
