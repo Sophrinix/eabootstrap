@@ -1,5 +1,5 @@
-DESCRIPTION
-===========
+WHAT IS?
+========
 
 EA bootstrap is an open source platform for quickly and professionally R&amp;D new expert advisors for Forex.
 
