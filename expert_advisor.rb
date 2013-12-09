@@ -22,13 +22,14 @@ load 'simulator.rb'
 load 'instrument.rb'
 
 class ExpertAdvisor < Simulator
-  attr_reader :eurusd, :x
+  attr_reader :eurusd, :x, :y
 
   # Constructor: initialize super-class, prepare instruments, calculate static
   # indicators, and calls begin-tick-end structure.
   def initialize(initial_balance, account_leverage, account_currency)
     super(initial_balance, account_leverage, account_currency) 
     @x = true
+    @y = true
 
     # R environment.
     R.quit
@@ -72,7 +73,7 @@ class ExpertAdvisor < Simulator
   #usePackage('forecast')
   
   driver <- dbDriver('PostgreSQL')
-  con <- dbConnect(driver, dbname='marketplayer')
+  con <- dbConnect(driver, dbname='eabootstrap')
   result <- dbSendQuery(con, 'SELECT * FROM eurusd_d1')
   df <- fetch(result, n=-1)
   
@@ -90,7 +91,7 @@ class ExpertAdvisor < Simulator
   dbUnloadDriver(driver)
 EOF
     logreturns = @renv.pull('r')
-    #sma = @renv.sma[1..10]
+    #sma = @renv.sma[9..15]
     #puts "#{sma}"
   end
   
@@ -109,6 +110,11 @@ EOF
     if x then
       send_order(@eurusd, "long", 0.01)
       @x = false
+    end
+
+    if y && !x then
+      close_position(@account.positions.first)
+      @y = false
     end
   end
   

@@ -74,7 +74,6 @@ public
     return false unless opt[:slippage].kind_of? Integer
 
     # Executes order.
-    # FIXME: Discount from balance.
     if order_type == "long"
       # Place order.
       if (opt[:price] - instrument.ask).abs <= opt[:slippage] * instrument.pip_size
@@ -85,6 +84,12 @@ public
                                 opt[:stop_loss],
                                 opt[:take_profit])
         @account.positions.push(position)
+
+        # Margin: multiply the margin requirement by base/account quote.
+        margin_ammount = lots * instrument.standard_lot / [account.leverage, instrument.leverage].min
+        margin_ammount = (margin_ammount * instrument.bid).round(2)
+        return false if @account.margin + margin_ammount >= @account.equity
+        @account.margin = @account.margin + margin_ammount
       end
     else
        # Place order.
@@ -96,6 +101,12 @@ public
                                 opt[:stop_loss],
                                 opt[:take_profit])
         @account.positions.push(position)
+
+        # Margin: multiply the margin requirement by base/account quote.
+        margin_ammount = lots * instrument.standard_lot / [account.leverage, instrument.leverage].min
+        margin_ammount = (margin_ammount * instrument.bid).round(2)
+        return false if @account.margin + margin_ammount >= @account.equity
+        @account.margin = @account.margin + margin_ammount
       end
     end
 
@@ -112,15 +123,59 @@ public
     # No scheduled orders yet.
   end
 
+  # Try changing atomically the position's attributes (e.g. S/L and T/P).
+  # Returns true iff changes took place.
   def change_position(position, options = {})
     # Get optional parameters.
-    # (...)
+    opt = {
+      stop_loss   => position.stop_loss,
+      take_profit => position.take_profit
+    }.merge(options)
 
-    # No position chage yet.
+    # Check whether changes can be made and, if negative, returns false.
+    # Bid / ask case.
+    if position.order_type == "long"
+      return false if
+        (position.instrument.open_price - position.instrument.bid).abs <=
+          position.instrument.freeze_level * position.instrument.pip_size
+    else
+      return false if
+        (position.instrument.open_price - position.instrument.ask).abs <=
+          position.instrument.freeze_level * position.instrument.pip_size
+    end
+    # Stop loss case.
+    if position.order_type == "long"
+      return false if
+        (position.stop_loss - position.instrument.bid).abs <=
+        position.instrument.freeze_level * position.instrument.pip_size
+    else
+      return false if
+        (position.stop_loss - position.instrument.ask).abs <=
+        position.instrument.freeze_level * position.instrument.pip_size
+    end
+    # Take profit case.
+    if position.order_type == "long"
+      return false if
+        (position.take_profit - position.instrument.bid).abs <=
+        position.instrument.freeze_level * position.instrument.pip_size
+    else
+      return false if
+        (position.take_profit - position.instrument.ask).abs <=
+        position.instrument.freeze_level * position.instrument.pip_size
+    end
+
+    # Set new stop loss.
+    position.stop_loss = opt[:stop_loss]
+
+    # Set new take profit.
+    position.take_profit = opt[:take_profit]
+    
+    true
   end
 
+  # Close an open position.
   def close_position(position)
-    # TODO
+    @account.positions.delete_at @account.positions.index(position)
   end
 
   #---------------------------------------------------------------------------

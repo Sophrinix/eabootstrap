@@ -24,4 +24,9 @@ class Position
     @stop_loss   = sl
     @take_profit = tp
   end
+
+  def to_s
+    "#{@lots} #{@order_type} #{@instrument.short_name} @ #{@open_price} " +
+    "with S/L=#{@stop_loss} and T/P=#{@take_profit}"
+  end
 end

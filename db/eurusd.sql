@@ -7,7 +7,7 @@ CREATE TABLE eurusd_meta (
   digits        INTEGER      NOT NULL,
   stop_level    FLOAT        NOT NULL,
   freeze_level  FLOAT        NOT NULL,
-  default_lot   INTEGER      NOT NULL
+  standard_lot  INTEGER      NOT NULL
 );
 
 /* Financial instrument's series. */

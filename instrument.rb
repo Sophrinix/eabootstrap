@@ -46,7 +46,7 @@ class Instrument
   attr_accessor :stop_level   # Margin call when equity * stop_level < margin.
   attr_accessor :freeze_level # Freeze SL/TP within freeze_level * pip_size
 
-  attr_accessor :default_lot  # Default lot size.
+  attr_accessor :standard_lot # Default lot size.
   
   attr_accessor :mode         # Time series mode, "OHLC" or "TICK".
   attr_accessor :period       # Time series period, :M1, :M5, ..., :MN1.
@@ -65,7 +65,7 @@ class Instrument
   def initialize(shortname, period, options = {})
     opt = { :shift => 0 }.merge(options)                 # Catch options.
     
-    connection = PGconn.open(:dbname => "marketplayer")  # pgres connection.
+    connection = PGconn.open(:dbname => "eabootstrap")   # pgres connection.
     
     # Get instrument's meta-information.
     meta_query    = "SELECT * FROM #{shortname.downcase}_meta LIMIT 1;"
@@ -77,7 +77,7 @@ class Instrument
     @digits       = meta.first["digits"].to_i
     @stop_level   = meta.first["stop_level"].to_f
     @freeze_level = meta.first["freeze_level"].to_f
-    @default_lot  = meta.first["default_lot"].to_i
+    @standard_lot = meta.first["standard_lot"].to_i
 
     # Quotes information.
     @mode   = "OHLC"
@@ -159,6 +159,18 @@ class Instrument
 
   def bid
     @close_uts[@i]
+  end
+
+  # Format string.
+  def to_s
+    "Instrument: #{@short_name} (#{@full_name})\n" +
+    "Leverage: 1:#{@leverage}\n" +
+    "#{@datetime_uts.first} - #{@datetime_uts.last} " +
+    "(#{@datetime_uts.length} #{@period} obs.)\n" +
+    "Standard lot: #{@default_lot} units\n" +
+    "Pip size: #{@pip_size} [#{@digits} digits]\n" +
+    "Stop level: #{100 * @stop_level.round(0)}%, \n" +
+    "Freeze level: #{100 * @freeze_level.round(0)}%"
   end
 end
 

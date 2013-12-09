@@ -43,5 +43,11 @@ class Account
   def free_margin
     equity - margin
   end
+  
+  # Calculates the margin level.
+  def margin_level
+    return 0 if margin <= 0
+    equity / margin
+  end
 end
 
