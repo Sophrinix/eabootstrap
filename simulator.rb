@@ -183,6 +183,7 @@ public
   #---------------------------------------------------------------------------
 
   # Register an instrument to watch / simulate / trade.
+  # TODO: Register, also, the base/account currency for margin calculation.
   def use_instrument(instrument)
     instruments.push(instrument)
   end
