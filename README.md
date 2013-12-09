@@ -1,4 +1,4 @@
-WHAT IS?
+What is?
 ========
 
 *EA bootstrap* is an open source platform for quickly and professionally R&amp;D new expert advisors for Forex.
@@ -7,7 +7,7 @@ Written as a Ruby API, EA bootstrap provides an environment for quickly building
 All-in-one, expert advisors can perform calculations on entire time-series (just like R, S-plus, and Matlab traders do) as well as tick-by-tick (just like MetaTrader traders do) in the same program.
 
 
-STRATEGIES COVERED
+Strategies covered
 ==================
 
 The main line is to give foundation to build, evaluate and test any kind of strategy, from Modern Portfolio Theory's Buy and Hold up to High-Frequency Trading.
@@ -20,7 +20,7 @@ Vectorized phase enables one to calculate the whole time-series, just like R, S-
 The second phase, begin-tick-end, features a loop ranging all the ticks in the time-series, just like MetaTrader traders build their strategies.
 
 
-LINK WITH OTHER TECHNOLOGIES
+Links with other technologies
 ============================
 
 Currently, *EA bootstrap* has total integration with the statistical software R at any development phase.
@@ -33,7 +33,7 @@ Moreover, *EA bootstrap* may link seamlessly in the future with
 - Mathematica
 
 
-EVENT PROFILER
+Event profiler
 ==============
 
 *EA bootstrap* comes with an _event profiler_.
@@ -41,26 +41,7 @@ An event profiler helps understanding, at a first glance, which opportunities an
 Correcting biased strategies and getting new insights so comes to be easy to spot.
 
 
-ANALYSIS
-========
-
-Post-analysis are performed in a spreadsheet generated after EA bootstrap's execution.
-It has basic statistics, performance, sharpe index, MFE points distribution, and other.
-
-
-PARAMETER OPTIMIZATION
-======================
-
-*EA bootstrap* comes with an optimizer in order to search for the best parameters for the created expert advisor.
-It is possible to optimize measurable functions, like
-- Expected Return;
-- Profit / Loss ratio;
-- Maximum Relative Drawdown;
-- Maximum Absolute Drawdown;
-and others.
-
-
-POSITION SIZING
+Position sizing
 ===============
 
 Well known position sizing methods are also built-in, ready-to-use in EA bootstrap:
@@ -71,3 +52,21 @@ Well known position sizing methods are also built-in, ready-to-use in EA bootstr
 - Dynamic Position Sizing;
 - Fixed percentage.
 
+
+Post analysis
+=============
+
+Post-analysis are performed in a spreadsheet generated after EA bootstrap's execution.
+It has basic statistics, performance, sharpe index, MFE points distribution, and other.
+
+
+Parameter optimization
+======================
+
+*EA bootstrap* comes with an optimizer in order to search for the best parameters for the created expert advisor.
+It is possible to optimize measurable functions, like
+- Expected Return;
+- Profit / Loss ratio;
+- Maximum Relative Drawdown;
+- Maximum Absolute Drawdown;
+and others.
